@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="member">
+	
+	
+
+<!-- 조직원등록 -->	
+	<insert id="memberInsert" parameterClass="memberVO">
+		INSERT INTO MEMBER(
+						    MEM_ID
+						   ,MEM_NM
+						   ,MEM_PASS
+						   ,MEM_TELNO
+						   ,MEM_DATE
+						   ,MEM_EMAIL
+						   ,MEM_ADDR
+						   ,MEM_BRTHDY
+						   ,GRAD_PK
+						   ,DEPT_PK
+						   ,CLSF_PK
+						   ,MEM_SEX   
+						   ,MEM_PHOTO
+		)
+		VALUES(
+				#mem_id#
+			   ,#mem_nm#
+			   ,#mem_pass#
+			   ,#mem_telno#
+			   ,#mem_date#
+			   ,#mem_email#
+			   ,#mem_addr#
+			   ,#mem_brthdy#
+			   ,#grad_pk#
+			   ,#dept_pk#
+			   ,#clsf_pk#
+			   ,#mem_sex#
+			   ,#mem_photo#
+				)
+	</insert>
+
+	<!-- 조직원 전체조회 -->	
+	<select id="memberSelect" resultClass="memberVO">
+		SELECT 	MEMBER.* 
+				  , DEPT.DEPT_NM 
+				  , GRAD.GRAD_NM
+				  , CLSF.CLSF_NM
+		FROM 	MEMBER 
+				  , DEPT
+				  , CLSF
+				  , GRAD
+		WHERE MEMBER.DEPT_PK = DEPT.DEPT_PK
+		AND   MEMBER.CLSF_PK  = CLSF.CLSF_PK
+		AND   MEMBER.GRAD_PK  = GRAD.GRAD_PK
+		ORDER BY 
+    	MEMBER.GRAD_PK DESC,
+    	MEMBER.DEPT_PK DESC,
+    	MEMBER.CLSF_PK ASC
+	</select>
+	<select id="deptMemList" parameterClass="int" resultClass="memberVO">
+		SELECT 	MEMBER.* 
+				  , DEPT.DEPT_NM 
+				  , GRAD.GRAD_NM
+				  , CLSF.CLSF_NM
+		FROM 	MEMBER 
+				  , DEPT
+				  , CLSF
+				  , GRAD
+		WHERE MEMBER.DEPT_PK = DEPT.DEPT_PK
+		AND   MEMBER.CLSF_PK  = CLSF.CLSF_PK
+		AND   MEMBER.GRAD_PK  = GRAD.GRAD_PK
+		AND   MEMBER.DEPT_PK = #dept_pk#
+		ORDER BY 
+    	MEMBER.GRAD_PK DESC,
+    	MEMBER.DEPT_PK DESC,
+    	MEMBER.CLSF_PK ASC
+	</select>
+
+
+	<!-- 조직원 검색조회(세부보기) -->
+	<select	id="detailView" parameterClass="string" resultClass="memberVO">
+		SELECT *
+		FROM MEMBER
+		WHERE MEM_ID = #mem_id#
+	</select>
+	
+	
+	<!-- 조직원 정보수정 -->
+	<update id="updateMamber" parameterClass="memberVO">
+		UPDATE MEMBER
+		SET  MEM_NM = #mem_nm#
+			,MEM_PASS = #mem_pass#
+			,MEM_TELNO = #mem_telno#
+			,MEM_EMAIL = #mem_email#
+			,MEM_ADDR = #mem_addr#
+			,MEM_BRTHDY = #mem_brthdy#
+			,GRAD_PK = #grad_pk#
+			,DEPT_PK = #dept_pk#
+			,CLSF_PK = #clsf_pk# 
+		WHERE MEM_ID = #mem_id#
+	
+	</update>
+
+    <!--  조직원 일괄등록(Excel)파일 이용 -->
+    <insert id="massiveInsert" parameterClass="memberVO">
+	   INSERT INTO MEMBER(
+	   						MEM_ID
+						   ,MEM_NM
+						   ,MEM_PASS
+						   ,MEM_TELNO
+						   ,MEM_DATE
+						   ,MEM_EMAIL
+						   ,MEM_ADDR
+						   ,MEM_BRTHDY
+						   ,GRAD_PK
+						   ,DEPT_PK
+						   ,CLSF_PK
+						   ,MEM_SEX   
+	   					  ) 
+	    VALUES(
+	   			 #mem_id#
+				,#mem_nm#
+				,#mem_pass#
+				,#mem_telno#
+				,#mem_date#
+				,#mem_email#
+				,#mem_addr#
+				,#mem_brthdy#
+                ,(SELECT GRAD_PK FROM GRAD WHERE GRAD_NM = #grad_nm#)
+                ,(SELECT DEPT_PK FROM DEPT WHERE DEPT_NM = #dept_nm#)
+                ,(SELECT CLSF_PK FROM CLSF WHERE CLSF_NM = #clsf_nm#)
+                ,#mem_sex#
+ 				  )
+    </insert>
+
+	
+	<!-- 사원의 아이디와 비밀번호가 일치시에 값을 가져온다. 
+		   각각 마스터 테이블에서 이름을 가져와야 되기 때문에 조인을 사용함.
+	 -->	
+	<select id="login" parameterClass="map" resultClass="memberVO">
+		SELECT 	MEMBER.* 
+				  , DEPT.DEPT_NM 
+				  , GRAD.GRAD_NM
+				  , CLSF.CLSF_NM
+		FROM 	MEMBER 
+				  , DEPT
+				  , CLSF
+				  , GRAD
+		WHERE	MEM_ID = #mem_id#
+		AND     	MEM_PASS= #mem_pass#
+		AND     	MEMBER.DEPT_PK = DEPT.DEPT_PK
+		AND     	MEMBER.CLSF_PK  = CLSF.CLSF_PK
+		AND     	MEMBER.GRAD_PK  = GRAD.GRAD_PK
+	</select>
+	
+	<!-- 부서리스를 가져오기 위한 SELECT-->
+	<select id="deptList" resultClass="deptVO">
+		SELECT * FROM DEPT
+	</select>
+	
+	
+	
+
+	
+</sqlMap>

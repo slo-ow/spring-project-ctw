@@ -1,0 +1,18 @@
+http://blog.naver.com/icet25/2209865058442017.04.17
+김완수 - indexController에서 로그인 로그아웃 세션생성 삭제 완료
+
+김완수 - 관리자와 사원의 메인 페이지수정  
+
+김완수 - memberController,memberController2 로그아웃을 위한 메서드 추가 
+
+김완수 - calendar 하다가 일단 중지 
+
+박혜윤 - ManagementController에서 게시판관리 폼 생성
+
+박혜윤 - pom.xml, context.xml 에 트랜잭션을 위한 소스 추가 - 나중에 적용 예정
+
+박혜윤 - vote 온라인투표등록 폼 생성
+
+박혜윤 - 로그아웃 메소드 memberController에 통합
+
+박혜윤 - 로그아웃 - index페이지로 돌아가기

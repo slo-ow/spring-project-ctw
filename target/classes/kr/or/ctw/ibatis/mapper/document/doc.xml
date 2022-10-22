@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!--  [[개정이력(Modification Information)]]  				 -->
+<!--  수정일        		수정자      수정내용                			 -->
+<!--  ====     		====   =====    					 -->
+<!--  2017.05.02       김완수     최초작성                		     -->
+<!--  Copyright (c) 2017 by CTW All right reserved    -->
+<sqlMap namespace="doc">
+	<!-- 카테고리 목록을 가져온다.   -->
+	<select id="kateGorieList" resultClass="kateVO">
+		SELECT * FROM KATEGORIE_SE 
+		ORDER BY SE_PK DESC
+	</select>
+
+	 <!-- INSERT 처리  -->
+	 <!-- 부서  -->
+	<insert id="insertDept" parameterClass="docVO" >
+		INSERT INTO DEPT_DOC 
+		VALUES(
+					#doc_pk#
+				  , #doc_nm#
+				  , #doc_size#
+				  , SYSDATE
+				  , 'N'
+				  , #doc_extsn#
+				  , #mem_id#
+				  , #se_pk#
+				  , #dept_pk#
+				   )
+	</insert>
+	<!-- 사원 -->
+	<insert id="insertMem" parameterClass="docVO" >
+		INSERT INTO MEM_DOC 
+		VALUES(
+					#doc_pk#
+				  , #doc_nm#
+				  , #doc_size#
+				  , SYSDATE
+				  , 'N'
+				  , #doc_extsn#
+				  , #mem_id#
+				  , #se_pk#
+				   )
+	</insert>
+	<!-- 회사 -->
+	<insert id="insertCom" parameterClass="docVO" >
+		INSERT INTO MNGR_DOC 
+		VALUES(
+					#doc_pk#
+				  , #doc_nm#
+				  , #doc_size#
+				  , SYSDATE
+				  , 'N'
+				  , #doc_extsn#
+				  , #se_pk#
+				  , #mem_id#
+				   )
+	</insert>
+	
+	 <!-- INSERT 끝  -->
+	 
+	 
+	 <!-- 검색과 리스트  -->
+	<select id="deptList" parameterClass="docVO" resultClass="docVO">
+		SELECT * FROM DEPT_DOC 
+		WHERE    DOC_DEL = 'N'
+		AND		  DEPT_PK =#dept_pk#       
+		<isLessThan property="se_pk" compareValue="15">
+			AND SE_PK = #se_pk#
+		</isLessThan>
+		<isNotEmpty property="doc_extsn">
+		 	AND  DOC_EXTSN = #doc_extsn#
+		</isNotEmpty>
+		<isNotEmpty property="search">
+		 	AND  DOC_NM LIKE '%'||#search#||'%'
+		</isNotEmpty>
+	</select>
+	
+	<select id="comList" parameterClass="docVO" resultClass="docVO">
+		SELECT * FROM MNGR_DOC 
+		WHERE    DOC_DEL = 'N'
+		<isLessThan property="se_pk" compareValue="15">
+			AND SE_PK = #se_pk#
+		</isLessThan>
+		<isNotEmpty property="doc_extsn">
+		 	AND  DOC_EXTSN = #doc_extsn#
+		</isNotEmpty>
+		<isNotEmpty property="search">
+		 	AND  DOC_NM LIKE '%'||#search#||'%'
+		</isNotEmpty>
+	</select>
+	
+	<select id="memList" parameterClass="docVO" resultClass="docVO">
+		SELECT * FROM MEM_DOC 
+		WHERE    DOC_DEL = 'N'
+		<isLessThan property="se_pk" compareValue="15">
+			AND SE_PK = #se_pk#
+		</isLessThan>
+		<isNotEmpty property="doc_extsn">
+		 	AND  DOC_EXTSN = #doc_extsn#
+		</isNotEmpty>
+		<isNotEmpty property="search">
+		 	AND  DOC_NM LIKE '%'||#search#||'%'
+		</isNotEmpty>
+	</select>
+	
+	
+	<!-- 삭제 처리  -->
+	<update id="deptDelete" parameterClass="String" >
+		UPDATE DEPT_DOC
+		SET       DOC_DEL = 'Y'
+		WHERE  DOC_PK = #doc_pk#
+	</update>
+	
+	<update id="memDelete" parameterClass="String" >
+		UPDATE MEM_DOC
+		SET       DOC_DEL = 'Y'
+		WHERE  DOC_PK = #doc_pk#
+	</update>
+	
+	<update id="comDelete" parameterClass="String" >
+		UPDATE MNGR_DOC
+		SET       DOC_DEL = 'Y'
+		WHERE  DOC_PK = #doc_pk#
+	</update>
+	
+	
+
+	<!-- 휴지통리스트 -->
+	<select id="memTrashcan" resultClass="docVO">
+		SELECT * FROM MEM_DOC 
+		WHERE    DOC_DEL = 'Y'
+	</select>
+	<select id="deptTrashcan" parameterClass="memberVO" resultClass="docVO">
+		SELECT * FROM DEPT_DOC 
+		WHERE    DOC_DEL = 'Y'
+		AND        DEPT_PK = #dept_pk#
+	</select>
+	<select id="comTrashcan" resultClass="docVO">
+		SELECT * FROM MNGR_DOC 
+		WHERE    DOC_DEL = 'Y'
+	</select>
+	
+	<!-- 완전 삭제  -->
+	<delete id="deptTrashcanDel" parameterClass="String">
+		DELETE 
+		FROM   DEPT_DOC
+		WHERE  DOC_PK = #doc_pk#
+	</delete>
+		<delete id="memTrashcanDel" parameterClass="String">
+		DELETE 
+		FROM   MEM_DOC
+		WHERE  DOC_PK = #doc_pk#
+	</delete>
+		<delete id="comTrashcanDel" parameterClass="String">
+		DELETE 
+		FROM   MNGR_DOC
+		WHERE  DOC_PK = #doc_pk#
+	</delete>
+	
+	<!-- 복귀처리 -->
+	<update id="deptTrashcanUp" parameterClass="String" >
+		UPDATE DEPT_DOC
+		SET       DOC_DEL = 'N'
+		WHERE  DOC_PK = #doc_pk#
+	</update>
+	<update id="memTrashcanUp" parameterClass="String" >
+		UPDATE MEM_DOC
+		SET       DOC_DEL = 'N'
+		WHERE  DOC_PK = #doc_pk#
+	</update>
+	<update id="comTrashcanUp" parameterClass="String" >
+		UPDATE MNGR_DOC
+		SET       DOC_DEL = 'N'
+		WHERE  DOC_PK = #doc_pk#
+	</update>
+	
+	
+	
+	
+</sqlMap>

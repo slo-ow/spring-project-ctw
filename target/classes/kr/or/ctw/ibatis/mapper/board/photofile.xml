@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="photofile">
+	
+	<update id="photoFileInsert" parameterClass="photofileVO">
+		INSERT INTO PHOTO_FILE(
+								PHOTO_F_PK
+								,PHOTO_F_NM
+								,PHOTO_F_DATE
+								,PHOTO_F_SIZE
+								,PHOTO_FK
+								)
+		VALUES(
+				#photo_f_pk#
+				,#photo_f_nm#
+				,SYSDATE
+				,#photo_f_size#
+				,#photo_fk#
+				)
+	</update>
+	
+	
+	<select id="selectInfo" parameterClass="int" resultClass="photofileVO">
+		SELECT  *
+		FROM    PHOTO_FILE
+		WHERE   PHOTO_FK = #photo_fk#
+	</select>
+	
+	
+</sqlMap>

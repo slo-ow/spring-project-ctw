@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="vote">
+	
+	
+	<resultMap class="votechoiceVO" id="questionInfo">
+		<result property="choice_pk" column="CHOICE_PK"/>
+		<result property="choice_no" column="CHOICE_NO"/>
+		<result property="choice_cn" column="CHOICE_CN"/>
+		<result property="vote_fk" column="VOTE_FK"/>
+	</resultMap>
+	
+	<resultMap class="voteVO" id="voteboard">
+		<result property="vote_pk" column="VOTE_PK"/>
+		<result property="vote_sj" column="VOTE_SJ"/>
+		<result property="vote_cn" column="VOTE_CN"/>
+		<result property="vote_begin" column="VOTE_BEGIN"/>
+		<result property="vote_end" column="VOTE_END"/>
+		<result property="vote_sttus" column="VOTE_STTUS"/>
+		<result property="mem_id" column="MEM_ID"/>
+		<result property="dept_pk" column="DEPT_PK"/>
+		<result property="delcheck" column="DELCHECK"/>
+		<result property="mem_count" column="VOTE_PK" select="vote.memberCount"/>
+		<result property="mem_nm" column="MEM_ID" select="vote.nameselect"/>
+		<result property="dept_pk" column="MEM_ID" select="vote.deptselect"/>
+		<result property="questions" column="VOTE_PK" select="vote.getInfo"/>
+	</resultMap>
+	
+	<select id="nameselect" resultClass="string">
+		SELECT MEM_NM
+		FROM MEMBER
+		WHERE MEM_ID = #mem_id#
+	</select>
+	
+	<select id="deptselect" resultClass="int">
+		SELECT DEPT_PK
+		FROM MEMBER
+		WHERE MEM_ID = #mem_id#
+	</select>
+	
+	<select id="getInfo" parameterClass="int" resultMap="questionInfo">
+		SELECT *
+		FROM VOTE_CHOICE
+		WHERE VOTE_FK = #vote_fk#
+		ORDER BY CHOICE_PK ASC
+	</select>
+	
+	<select id="memberCount" parameterClass="int" resultClass="int">
+		SELECT 	COUNT(*)
+		FROM	VOTE_RT
+		where VOTE_FK=#vote_fk#
+	</select>
+	
+<!-- 	
+	<select id="info" parameterClass="int" resultClass="votechoiceVO">
+		SELECT 	VOTE.*,VOTE_CHOICE.* 
+		FROM 	VOTE,VOTE_CHOICE
+		WHERE   VOTE.VOTE_PK = VOTE_CHOICE.VOTE_FK(+)
+		AND     VOTE.VOTE_PK =  #vote_pk#
+	 	ORDER BY  VOTE_CHOICE.CHOICE_NO ASC
+	</select>
+	 -->
+	 
+	 
+	<select id="voteList" parameterClass="map" resultMap="voteboard" >
+		SELECT 	VOTE.*,MEMBER.*
+		FROM 	VOTE,MEMBER
+		WHERE	MEMBER.MEM_ID = VOTE.MEM_ID
+		<dynamic prepend="AND">
+			<isNotEmpty property="mem_id">
+				VOTE.MEM_ID = #mem_id#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY VOTE_PK DESC
+	</select>
+	
+	
+	<select id="voteInfo" resultMap="voteboard" >
+		SELECT 	VOTE.*,MEMBER.MEM_NM 
+		FROM 	VOTE,MEMBER
+		WHERE	MEMBER.MEM_ID = VOTE.MEM_ID
+		AND		VOTE.VOTE_PK =  #vote_pk#
+	</select>
+	
+	
+	
+	<insert id="voteInsert" parameterClass="voteVO">
+		<selectKey keyProperty="vote_pk" resultClass="int" >
+			SELECT VOTE_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO VOTE(
+						VOTE_PK
+						,VOTE_SJ
+						,VOTE_CN
+						,VOTE_BEGIN
+						,VOTE_END
+						,VOTE_STTUS
+						,MEM_ID
+						,DEPT_PK
+						,DELCHECK
+						)
+		VALUES(
+				#vote_pk#
+				,#vote_sj#
+				,#vote_cn#
+				,SYSDATE
+				,#vote_end#
+				,'N'
+				,#mem_id#
+				,#dept_pk#
+				,'N'
+				)
+		
+	</insert>
+	
+	
+	<update id="voteOpen" parameterClass="int">
+		UPDATE	VOTE
+		SET		VOTE_STTUS = 'Y'
+		WHERE	VOTE_PK=#vote_pk#
+	</update>
+	
+	<update id="voteDelete" parameterClass="int">
+		UPDATE	VOTE
+		SET		DELCHECK = 'Y'
+		WHERE	VOTE_PK=#vote_pk#
+	</update>
+	
+	
+	
+</sqlMap>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="photo">
+	
+	<sql id="dynamicCondition">
+		<dynamic prepend="AND">
+			<isNotEmpty property="searchType">
+				<isEqual property="searchType" compareValue="mem_nm">
+					MEM_NM LIKE '%'||#searchWord#||'%'
+				</isEqual>
+				<isEqual property="searchType" compareValue="photo_sj">
+					PHOTO_SJ LIKE '%'||#searchWord#||'%'
+				</isEqual>
+				<isEqual property="searchType" compareValue="photo_cn">
+					PHOTO_CN LIKE '%'||#searchWord#||'%'
+				</isEqual>
+			</isNotEmpty>
+		</dynamic>
+	</sql>
+	
+	
+	<resultMap class="photofileVO" id="photolist">
+		<result property="photo_f_pk" column="PHOTO_F_PK"/>
+		<result property="photo_f_nm" column="PHOTO_F_NM"/>
+		<result property="photo_f_date" column="PHOTO_F_DATE"/>
+		<result property="photo_f_size" column="PHOTO_F_SIZE"/>
+		<result property="photo_fk" column="PHOTO_FK"/>
+	</resultMap>
+	
+	<resultMap class="photoVO" id="galleryboard">
+		<result property="photo_pk" column="PHOTO_PK"/>
+		<result property="photo_sj" column="PHOTO_SJ"/>
+		<result property="photo_cn" column="PHOTO_CN"/>
+		<result property="photo_date" column="PHOTO_DATE"/>
+		<result property="delcheck" column="DELCHECK"/>
+		<result property="like_count" column="LIKE_COUNT" />
+		<result property="file_count" column="FILE_COUNT"/>
+		<result property="mem_id" column="MEM_ID"/>
+		<result property="mem_nm" column="MEM_ID" select="photo.nameselect" />
+		<result property="imglist" column="PHOTO_PK" select="photo.getphoto"/>
+	</resultMap>
+	
+	
+	
+	<insert id="potoInsert" parameterClass="photoVO">
+		<selectKey keyProperty="photo_pk" resultClass="int">
+			SELECT PHOTO_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO PHOTO(
+						PHOTO_PK
+						,PHOTO_SJ
+						,PHOTO_CN
+						,PHOTO_DATE
+						,PHOTO_CNT
+						,MEM_ID
+						,ACTVTY_PK
+						,DELCHECK
+						)
+		VALUES(
+				#photo_pk#
+				,#photo_sj#
+				,#photo_cn#
+				,SYSDATE
+				,0
+				,#mem_id#
+				,'gallery'
+				,'N'
+				)
+		
+	</insert>
+	
+	<select id="nameselect" resultClass="string">
+		SELECT MEM_NM
+		FROM MEMBER
+		WHERE MEM_ID = #mem_id#
+	</select>
+	
+	<select id="getphoto" parameterClass="int" resultMap="photolist" >
+		SELECT 	*
+		FROM	PHOTO_FILE
+		WHERE	PHOTO_FK=#photo_pk#
+		ORDER BY PHOTO_FK ASC
+	</select>
+	
+	<select id="potoList" parameterClass="map" resultMap="galleryboard">
+		SELECT P.*,M.MEM_NM
+		,     (SELECT COUNT(*) FROM PHOTO_EXPRSN WHERE P.PHOTO_PK = PHOTO_EXPRSN.PHOTO_FK ) LIKE_COUNT
+		,     (SELECT COUNT(*) FROM PHOTO_FILE WHERE P.PHOTO_PK = PHOTO_FILE.PHOTO_FK ) FILE_COUNT
+		FROM   PHOTO P, MEMBER M
+		WHERE P.MEM_ID = M.MEM_ID
+	   	<include refid="dynamicCondition" />
+		ORDER BY P.PHOTO_PK DESC
+	</select>
+	
+	
+	<select id="listAll" parameterClass="pagingVO" resultMap="galleryboard">
+		SELECT A.*
+ 		FROM (
+ 			SELECT ROWNUM AS RNUM, B.* 
+       		FROM
+	            (
+		            SELECT P.*,M.MEM_NM
+					,     (SELECT COUNT(*) FROM PHOTO_EXPRSN WHERE P.PHOTO_PK = PHOTO_EXPRSN.PHOTO_FK ) LIKE_COUNT
+					,     (SELECT COUNT(*) FROM PHOTO_FILE WHERE P.PHOTO_PK = PHOTO_FILE.PHOTO_FK ) FILE_COUNT
+					FROM   PHOTO P, MEMBER M
+					WHERE P.MEM_ID = M.MEM_ID
+			    	<include refid="dynamicCondition" />
+					ORDER BY P.PHOTO_PK DESC
+	            
+	            ) B
+	        <![CDATA[
+			WHERE ROWNUM <= #endRow#) A
+		WHERE A.RNUM >= #startRow#
+		]]>
+	</select>
+	
+	<update id="photoDelete">
+		UPDATE	PHOTO
+		SET		DELCHECK = 'Y'
+		WHERE	PHOTO_PK = #photo_pk#
+	</update>
+	
+</sqlMap>

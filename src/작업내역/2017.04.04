@@ -1,0 +1,20 @@
+2017.04.04
+김선아 - resources/assets/css/custom.css 파일 추가 -> guest mail form 추가 , 스타일 변경
+
+2017.04.04
+문성철 - resources/swiper 폴더추가 -> index.jsp 안에 swiper API 기능 적용
+
+2017.04.04
+문성철 - resources/indexpage/assets/css/images/  소셜아이콘이미지 추가 -> git.png,facebook.png,google.png,instar.png
+
+2017.04.04
+문성철 -  resources/assets/css/custom.css 스타일 추가 -> 소셜아이콘 스타일 변경 (커서포인터)
+
+2017.04.04
+문성철 -  resources/assets/js/custom.js 파일추가 -> 소셜아이콘 클릭 기능 추가 
+
+2017.04.04
+문성철 -  index.jsp -> 메뉴 -> INTRODUCE 메뉴 클릭 -> indexController (introduce) ->  introduce.jsp 페이지로 이동 
+
+2017.04.04
+박혜윤 - 

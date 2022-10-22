@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+   
+   <!-- Root Context: defines shared resources visible to all other web components -->
+   
+   
+   
+      <!-- properties 등록 -->
+      <context:property-placeholder location="classpath:kr/or/ctw/ibatis/SqlMapConfig.properties"/>
+      
+      <!-- DataSource 등록 -->
+      <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+            p:driverClassName="${driver}" 
+            p:url="${url}" 
+            p:username="ctw"
+            p:password="ctw" />
+
+<!-- <websocket:handlers>
+	<websocket:mapping handler="" path=""/>
+	<websocket:handshake-handler ref="res"/>
+</websocket:handlers>
+            
+             -->
+      <!-- SqlMapclient 등록 -->
+      <bean id="sqlMapClient" class="kr.or.ddit.commons.ibatis.CustomSqlMapClientFactoryBean"   
+         p:dataSource-ref="dataSource"
+         p:configLocation="classpath:kr/or/ctw/ibatis/SqlMapConfig.xml"
+         p:mappingLocations="classpath:kr/or/ctw/ibatis/mapper/*/*.xml"
+         p:typeAliasPackages="kr.or.ctw.**.vo"
+         />
+         
+         	<!-- 메일보내기 -->
+		<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+			<property name="host" value="smtp.gmail.com" /><!-- gmil로 보내기위한 설정 -->
+			<property name="port" value="587" /><!-- 메일송신을받기위한 전용포트번호는 587로 규정되어있음 -->
+			<property name="username" value="wansoo0243@gmail.com" /><!-- 이부분에 자신의 구글메일계정 넣도록한다 -->
+			<property name="password" value="dhkstn0243!" /><!-- 자신의 구글계정 패스워드 -->
+			<property name="javaMailProperties">
+				<props>
+					<prop key="mail.transport.protocol">smtp</prop>
+					<prop key="mail.smtp.auth">true</prop>
+					<prop key="mail.smtp.starttls.enable">true</prop>
+					<prop key="mail.debug">true</prop>
+				</props>
+			</property>
+		</bean>
+         
+         
+            
+      <!-- 트랜잭션을 쓰기위한 transationManager -->     
+      <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+           <property name="dataSource" ref="dataSource"/>
+      </bean>
+      
+  	  <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false" />
+  	
+	 <!--multipart 파일 업로드를 위한 Resolver  -->
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+      
+      
+      <context:component-scan base-package="kr.or.ctw" use-default-filters="false">
+         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+      </context:component-scan>
+      
+   
+</beans>

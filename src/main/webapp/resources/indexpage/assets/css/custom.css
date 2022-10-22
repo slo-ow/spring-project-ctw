@@ -1,0 +1,70 @@
+/*  
+	작성자: 김선아 
+	설명   : index 페이지의 guest mail form 스타일  id = guest_mail  
+*/
+#guest_mail {
+	width: 800px;
+	margin-left: 420px;
+	margin-top: 150px;
+}
+
+/*
+	작성자: 문성철
+	설명   : index 페이지의 소셜 아이콘 커서포인터
+*/
+.icons  li{
+	cursor: pointer;	
+}
+/*
+	작성자: 박혜윤
+	설명   : index 페이지의 폰트 적용
+*/
+@font-face { 
+ 	font-family : 'Neue_Uppercase'; 
+ 	src : url('/ctw/resources/indexpage/assets/fonts/Neue_Uppercase.otf'); 
+ } 
+.headfont, #company{
+	font-family : Neue_Uppercase;
+}
+
+/*
+	작성자: 문성철
+	설명   : introduce 페이지의 프로필 사진 스타일
+*/
+.center-block {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.img-circle {
+	border-radius: 50%;
+}
+
+img {
+	vertical-align: middle;
+}
+
+.img-responsive, .thumbnail>img, .thumbnail a>img, .carousel-inner>.item>img,
+	.carousel-inner>.item>a>img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.img-rounded {
+	border-radius: 6px;
+}
+/*
+	작성자: 박혜윤
+	설명   : index 페이지의 폰트 적용
+*/
+@font-face { 
+ 	font-family : 'Phenomena-Bold'; 
+ 	src : url('/ctw/resources/indexpage/assets/fonts/Phenomena-Bold.otf'); 
+ } 
+
+@font-face { 
+ 	font-family : 'NanumGothic'; 
+ 	src : url('/ctw/resources/indexpage/assets/fonts/NanumGothic.ttf'); 
+ } 

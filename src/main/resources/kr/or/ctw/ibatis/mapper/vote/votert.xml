@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="votert">
+	
+	<insert id="voteRtInsert" parameterClass="votertVO">
+		<selectKey keyProperty="rt_pk" resultClass="int">
+			SELECT VOTE_RT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO VOTE_RT(
+						RT_PK
+						,MEM_ID
+						,CHOICE_FK
+						,VOTE_FK
+						)
+		VALUES(
+				#rt_pk#
+				,#mem_id#
+				,#choice_fk#
+				,#vote_fk#
+				)
+	</insert>
+	
+	
+	<select id="selectVoteRt" parameterClass="map" resultClass="votertVO">
+		SELECT 	*
+		FROM	VOTE_RT
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="mem_id">
+				MEM_ID = #mem_id#
+			</isNotEmpty>
+		</dynamic>
+			
+	</select>
+	
+	
+	<select id="selectVoteRtInfo" parameterClass="int" resultClass="votertVO">
+		SELECT 	*
+		FROM	VOTE_RT
+		WHERE	VOTE_FK = #vote_fk#
+	</select>
+	
+	
+</sqlMap>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="bbsactvty">
+
+
+	<select id="boardList" resultClass="bbsactvtyVO">
+		SELECT 	*
+		FROM  	BBS_ACTVTY
+	</select>
+
+	<update id="activationUpdate" parameterClass="map">
+		UPDATE 	BBS_ACTVTY
+		SET   	ACTVTY_NM = #actvty_nm#
+		WHERE 	ACTVTY_PK = #actvty_pk#
+	</update>
+	
+</sqlMap>

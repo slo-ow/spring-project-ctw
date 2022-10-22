@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="lbrtybbsfile">
+	<typeAlias alias="lbrtybbsfileVO" type="kr.or.ctw.board.vo.LbrtyBBSFileVO"/>
+	
+	<!-- 다중파일 업로드 -->
+	 <insert id="insertBbsFileInfo" parameterClass="LbrtyBBSFileVO">
+		INSERT INTO LBRTY_BBS_FILE
+		VALUES(
+			#bbs_f_pk#
+		   ,#bbs_f_nm#
+		   ,SYSDATE
+		   ,#bbs_f_extsn#
+		   ,#bbs_f_size#
+		   ,#bbs_fk#
+		   	  )
+	</insert>
+	
+	<!-- filename을 넘겨받아 DB에서 해당파일이름의 원본파일이름을 반환 -->
+	 <select id="selectBbsFilenm" parameterClass="string" resultClass="string">
+		SELECT BBS_F_NM FROM LBRTY_BBS_FILE
+		WHERE BBS_F_NM LIKE '%' ||#bbs_f_nm#|| '%'
+	</select> 
+	
+	<!-- 게시물찾기 -->
+	 <select id="selectBbsFileInfo" parameterClass="int" resultClass="LbrtyBBSFileVO">
+		SELECT * FROM LBRTY_BBS_FILE WHERE BBS_FK = #bbs_pk#
+	</select>
+	
+	<insert id="bbsFileInsert" parameterClass="lbrtybbsfileVO">
+		INSERT INTO LBRTY_BBS_FILE
+					VALUES(
+					#bbs_f_pk#,
+					#bbs_f_nm#,
+					SYSDATE,
+					#bbs_f_extsn#,
+					#bbs_f_size#,
+					#bbs_fk#
+					)
+	</insert>
+	
+</sqlMap>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="deptnotice">
+	
+	<select id="DeptNoticeList" parameterClass="map" resultClass="deptnoticeVO">
+		SELECT  D.*,M.MEM_NM 
+		FROM    DEPT_NOTICE D,MEMBER M
+		WHERE	M.MEM_ID = D.MEM_ID 
+		<dynamic prepend="AND">
+			<isNotEmpty property="dept_pk">
+				D.DEPT_PK = #dept_pk#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY D.NOTICE_PK DESC
+	</select>
+	
+	
+	<insert id="deptnoticeInsert" parameterClass="deptnoticeVO">
+		<selectKey keyProperty="notice_pk" resultClass="int" >
+			SELECT DEPT_NOTICE_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO DEPT_NOTICE(
+						NOTICE_PK
+						,NOTICE_SJ
+						,NOTICE_CN
+						,NOTICE_DATE
+						,NOTICE_CNT
+						,MEM_ID
+						,DEPT_PK
+						,ACTVTY_PK
+						)
+		VALUES(
+				#notice_pk#
+				,#notice_sj#
+				,#notice_cn#
+				,SYSDATE
+				,0
+				,#mem_id#
+				,#dept_pk#
+				,'notice'
+				)
+	</insert>
+	
+	<select id="deptSelectInfo" parameterClass="int" resultClass="deptnoticeVO">
+		SELECT  D.*,M.MEM_NM 
+		FROM    DEPT_NOTICE D,MEMBER M
+		WHERE	M.MEM_ID = D.MEM_ID 
+		AND		D.NOTICE_PK = #notice_pk#
+	</select>
+	
+	<update id="deptUpdateHits" parameterClass="int">
+		UPDATE	DEPT_NOTICE
+		SET	 	NOTICE_CNT = NOTICE_CNT+1
+		WHERE	NOTICE_PK = #notice_pk#
+	</update>
+	
+	<update id="deptDel" parameterClass="int">
+		DELETE
+		FROM	DEPT_NOTICE
+		WHERE	NOTICE_PK = #notice_pk#
+	</update>
+	
+	<update id="deptUpdate" parameterClass="deptnoticeVO">
+		UPDATE	 DEPT_NOTICE
+		SET		NOTICE_SJ =#notice_sj#
+				,NOTICE_CN=#notice_cn#
+		WHERE	 NOTICE_PK = #notice_pk#
+	</update>
+	
+</sqlMap>

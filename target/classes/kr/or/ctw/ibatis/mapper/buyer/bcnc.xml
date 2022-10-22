@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="bcnc">
+
+<!--  ======= 거래처 최종등록 및 임시거래처 상태 업데이트 =======  -->
+<insert id="insertBcnc" parameterClass="bcncVO">
+<selectKey keyProperty="bcnc_pk" resultClass="int">
+ 	select bcnc_seq.nextval from dual
+</selectKey>
+	insert into bcnc values(
+ 					#bcnc_pk#
+ 				   ,#bcnc_nm#
+ 				   ,#bcnc_telno#
+ 				   ,#bcnc_addr#
+ 				   ,#bcnc_rprsntv#
+ 				   ,#lat#
+ 				   ,#lng#
+ 				   ,#bcnc_mem_telno#
+ 				   ,#bcnc_mem_name#
+ 				   ,#mem_id#
+ 				   ,#dept_pk#
+ 	)
+</insert>
+
+<!-- ===== 임시 거래처 상태 업데이트 ===== -->
+<update id="updateStatus" parameterClass="int">
+	update bcnc_tmpr set confm='Y' where bcnc_pk = #bcnc_pk#  
+</update>
+
+
+
+
+ <!-- 거래처와 임시 거래처 목록  -->
+<select id="listAll" resultClass="bcncVO">
+	SELECT * FROM BCNC
+</select>
+
+<select id="tmprlistall" resultClass="bcncVO">
+	SELECT DEPT.DEPT_NM,BCNC_TMPR.* ,CLSF.CLSF_NM FROM DEPT,BCNC_TMPR,MEMBER,CLSF
+	WHERE  DEPT.DEPT_PK = BCNC_TMPR.DEPT_PK
+	AND    MEMBER.MEM_ID = BCNC_TMPR.MEM_ID
+	AND    MEMBER.CLSF_PK = CLSF.CLSF_PK
+</select>
+<!-- =======거래처와 임시 거래처 목록 끝=======   -->
+
+
+
+<!--  거래처 정보와 임시 거래처 정보  -->
+<select id="infoBcnc" resultClass="bcncVO" parameterClass="int">
+	SELECT 	BCNC.*
+			  , MEMBER.*  
+	FROM     BCNC,MEMBER
+	WHERE  BCNC_PK = #bcnc_pk#
+	AND      MEMBER.MEM_ID = BCNC.MEM_ID
+</select>
+
+<select id="infoBcncTmpr" resultClass="bcncVO" parameterClass="int">
+	SELECT 	BCNC_TMPR.*
+			  , MEMBER.*  
+	FROM     BCNC_TMPR,MEMBER
+	WHERE  BCNC_PK = #bcnc_pk#
+	AND      MEMBER.MEM_ID = BCNC_TMPR.MEM_ID
+</select>
+
+<!--  =======거래처 정보와 임시 거래처 정보 끝=======  -->
+
+
+
+
+<!-- <delete id="deleteBcnc" parameterClass="int">
+	delete from bcnc where bcnc_pk = #bcnc_pk#
+</delete>
+
+<update id="updateBcnc" parameterClass="bcncVO">
+	update bcnc set(
+			#bcnc_nm#
+ 				   ,#bcnc_mem_name#
+ 				   ,#bcnc_addr#
+ 				   ,#bcnc_mem_telno#
+ 				   ) where bcnc_pk = #bcnc_pk#
+</update> -->
+
+
+<insert id="insertBcncTmpr" parameterClass="bcncVO">
+ <selectKey keyProperty="bcnc_pk" resultClass="int">
+ 	select bcnc_tmpr_seq.nextval from dual
+ </selectKey>
+ 	insert into bcnc_tmpr values(
+ 					#bcnc_pk#
+ 				   ,#bcnc_nm#
+ 				   ,#bcnc_telno#
+ 				   ,#bcnc_addr#
+ 				   ,#bcnc_rprsntv#
+ 				   ,#lat#
+ 				   ,#lng#
+ 				   ,#bcnc_mem_telno#
+ 				   ,#bcnc_mem_name#
+ 				   ,default
+ 				   ,#mem_id#
+ 				   ,#dept_pk#
+ 	)
+</insert>
+
+
+
+<delete id="deleteBcncTmpr" parameterClass="int">
+	delete from bcnc_tmpr where bcnc_pk = #bcnc_pk#
+</delete>
+
+<update id="updateBcncTmpr" parameterClass="bcncVO">
+	update bcnc_tmpr set(
+			#bcnc_nm#
+ 				   ,#bcnc_mem_name#
+ 				   ,#bcnc_addr#
+ 				   ,#bcnc_mem_telno#
+ 				   ) where bcnc_pk = #bcnc_pk#
+</update>
+
+
+</sqlMap>

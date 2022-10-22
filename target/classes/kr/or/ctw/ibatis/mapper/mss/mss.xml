@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!--  [[개정이력(Modification Information)]]  				 -->
+<!--  수정일        		수정자      수정내용                			 -->
+<!--  ====     		====   =====    					 -->
+<!--  2017.05.13       김완수     최초작성                		     -->
+<!--  Copyright (c) 2017 by CTW All right reserved    -->
+<sqlMap namespace="mss">
+
+
+	<!-- 쪽지 insert -->
+	<insert id="mssInsert" parameterClass="mssVO">
+		<selectKey keyProperty="mss_pk" resultClass="int">
+			SELECT MSSAGE_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO MSSAGE VALUES(
+		             #mss_pk#
+		            ,'N'
+		            ,'N'
+		            ,#mss_sj#
+					,#mss_cn#	
+					,SYSDATE	
+					,#dspt_id#	
+					,#recp_id#	
+					,'N'	
+					)
+	</insert>
+	<!-- 파일 insert -->
+	<insert id="mssFileInsert" parameterClass="mssFileVO">
+		INSERT INTO MSSAGE_FILE VALUES(
+		           #mss_f_pk#
+		          ,#mss_f_nm#
+		          ,#mss_f_size#
+		          ,SYSDATE
+		          ,#mss_fk#
+					)
+	</insert>
+	
+	<!-- 수신자 리스트 -->
+	<select id="rectList" parameterClass="string" resultClass="mssVO">
+		SELECT  MEMBER.MEM_NM 
+				  , DEPT.DEPT_NM 
+				  , CLSF.CLSF_NM
+				  , MSSAGE.* 
+	    FROM    MEMBER
+	              , DEPT
+	              , CLSF
+	              , MSSAGE
+        WHERE  DEPT.DEPT_PK = MEMBER.DEPT_PK 
+        AND 		CLSF.CLSF_PK = MEMBER.CLSF_PK
+        AND 		MSSAGE.DSPT_ID = MEMBER.MEM_ID
+        AND    	MSSAGE.RECP_ID = #mem_id#
+		AND      MSSAGE.RECP_DEL = 'N'
+		ORDER BY MSSAGE.MSS_DATE DESC
+	</select>
+	<!-- 발신자 리스트 -->
+	<select id="dsptList" parameterClass="string" resultClass="mssVO">
+		SELECT  MEMBER.MEM_NM 
+				  , DEPT.DEPT_NM 
+				  , CLSF.CLSF_NM 
+				  , MSSAGE.*
+   		FROM    MEMBER
+	              , DEPT
+	              , CLSF
+	              , MSSAGE
+       WHERE   DEPT.DEPT_PK = MEMBER.DEPT_PK 
+       AND 		CLSF.CLSF_PK = MEMBER.CLSF_PK
+       AND 		MSSAGE.RECP_ID = MEMBER.MEM_ID
+       AND   		MSSAGE.DSPT_ID = #mem_id#
+       AND       MSSAGE.DSPT_DEL = 'N'
+       ORDER BY MSSAGE.MSS_DATE DESC
+	</select>
+	
+	<!-- 발신자에서 보는 정보 -->
+	<select id="mssDsptInfo" parameterClass="int" resultClass="MssVO">
+		SELECT   DSP.MEM_NM
+					,DSP.DEPT_NM
+					,DSP.CLSF_NM
+					,DSP.MEM_ID
+					,MSSAGE.*
+					,MSSAGE_FILE.* 
+		FROM MSSAGE,MSSAGE_FILE,(SELECT  MEMBER.MEM_ID
+							                               , MEMBER.MEM_NM
+							                               , DEPT.DEPT_NM
+							                               , CLSF.CLSF_NM
+							                      FROM    MEMBER,CLSF,DEPT
+							                     WHERE   MEMBER.DEPT_PK = DEPT.DEPT_PK
+							                        AND    MEMBER.CLSF_PK = CLSF.CLSF_PK
+							                        ) DSP
+		WHERE  MSSAGE.MSS_PK = MSSAGE_FILE.MSS_FK
+		AND    MSSAGE.RECP_ID = DSP.MEM_ID
+		AND    MSSAGE.MSS_PK = #mss_pk#
+
+	</select>
+	
+	<!--  수신자에서보는 정보-->
+	<select id="mssRecpInfo" parameterClass="int" resultClass="MssVO">
+		SELECT   DSP.MEM_NM
+					,DSP.DEPT_NM
+					,DSP.CLSF_NM
+					,DSP.MEM_ID
+					,MSSAGE.*
+					,MSSAGE_FILE.* 
+		FROM MSSAGE,MSSAGE_FILE,(SELECT  MEMBER.MEM_ID
+							                               , MEMBER.MEM_NM
+							                               , DEPT.DEPT_NM
+							                               , CLSF.CLSF_NM
+							                      FROM    MEMBER,CLSF,DEPT
+							                     WHERE   MEMBER.DEPT_PK = DEPT.DEPT_PK
+							                        AND    MEMBER.CLSF_PK = CLSF.CLSF_PK
+							                        ) DSP
+		WHERE  MSSAGE.MSS_PK  = MSSAGE_FILE.MSS_FK
+		AND      MSSAGE.DSPT_ID = DSP.MEM_ID
+		AND      MSSAGE.MSS_PK  = #mss_pk#
+	</select>
+	
+	<!-- 메시지 확인여부 -->
+	<update id="mssCheck" parameterClass="int">
+		UPDATE MSSAGE 
+		SET       MMS_CHECK='Y'
+		WHERE  MSS_PK = #mss_pk# 
+	</update>
+	
+	
+	
+	<!-- 발신자에서 쪽지 삭제 -->
+	<update id="rectDelUpdate" parameterClass="int">
+		UPDATE MSSAGE 
+		SET       RECP_DEL='Y'
+		WHERE  MSS_PK = #mss_pk# 
+	</update>
+	<!-- 수신자에서 쪽지 삭제 -->
+	<update id="dsptDelUpdate" parameterClass="int">
+		UPDATE MSSAGE 
+		SET       DSPT_DEL='Y'
+		WHERE  MSS_PK = #mss_pk# 
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</sqlMap>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="prjctpartcptn">
+	
+	<insert id="projectMemberInsert" parameterClass="prjctpartcptnVO">
+		INSERT INTO PRJCT_PARTCPTN VALUES(
+					  PRJCT_PARTCPTN_SEQ.NEXTVAL
+					, #prjct_fk#
+					, #mem_id#
+					<isNull property="prjct_at">
+					, 'N'
+					</isNull>
+					<isNotNull property="prjct_at">
+					, #prjct_at#
+					</isNotNull>
+					, SYSDATE
+		)
+	
+	</insert>
+	
+	<update id="acceptProject" parameterClass="map">
+		UPDATE PRJCT_PARTCPTN
+		SET    PRJCT_AT='Y'
+		WHERE  MEM_ID=#mem_id#
+		AND    PRJCT_FK = #prjct_fk#
+	</update>
+	
+</sqlMap>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="prjct">
+	
+	
+	<select id="projectList" resultClass="prjctVO" parameterClass="string">
+				SELECT  P.*
+					, S.PROGRS_NM
+					, M.MEM_NM
+					, (
+					   SELECT	PRJCT_PARTCPTN.PRJCT_AT 
+					   FROM   	PRJCT_PARTCPTN
+					   			  , PRJCT 
+					   WHERE 	PRJCT.PRJCT_PK = PRJCT_PARTCPTN.PRJCT_FK 
+					   	   AND 	PRJCT_PARTCPTN.MEM_ID =#mem_id#
+					   	   AND 	PRJCT.PRJCT_PK = P.PRJCT_PK
+					   ) PRJCT_AT
+          			 ,(
+					   SELECT	COUNT(*)
+					   FROM   	PRJCT_PARTCPTN
+					   			  , PRJCT 
+					   WHERE 	PRJCT.PRJCT_PK = PRJCT_PARTCPTN.PRJCT_FK 
+					   	   AND 	PRJCT.PRJCT_PK = P.PRJCT_PK
+                		   AND   PRJCT_PARTCPTN.PRJCT_AT = 'Y'
+					   ) PRJCT_NMPR  
+		FROM 	  PRJCT P
+					, PROGRS S
+					, MEMBER M
+					
+          
+		WHERE P.PROGRS_FK = S.PROGRS_PK  
+		AND  P.MEM_ID = M.MEM_ID
+		AND  P.PRJCT_PK IN(
+									SELECT  PRJCT_FK
+									FROM 	PRJCT_PARTCPTN 
+									WHERE  MEM_ID=#mem_id#
+									)			
+		ORDER BY P.PRJCT_PK DESC
+	</select>
+	
+	<insert id="projectInsert" parameterClass="prjctVO">
+		<selectKey keyProperty="prjct_pk" resultClass="int" >
+			SELECT PRJCT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO PRJCT VALUES(
+						 #prjct_pk#
+						,#prjct_nm#
+						,1
+						,#prjct_cn#
+						,#prjct_begin#
+						,#prjct_end#
+						,#mem_id#
+						,2
+						)
+	</insert>
+	
+	
+	<select id="projectInfo" parameterClass="int" resultClass="prjctVO">
+		SELECT *
+		FROM PRJCT
+		WHERE prjct_pk = 23
+	</select>
+	
+
+	
+	
+</sqlMap>

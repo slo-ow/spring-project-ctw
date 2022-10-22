@@ -1,0 +1,118 @@
+<!-- 
+ * @Description : 유저프로필 - 잠금화면 custom css 
+ * @author 문성철 (icet25@naver.com)
+ * @version 1.0
+ * @since 2017.04.26
+ * 
+ -->
+@CHARSET "UTF-8";
+body{
+  padding:0;
+  margin:0;
+}
+.vid-container{
+  position:relative;
+  height:100vh;
+  overflow:hidden;
+}
+.bgvid {
+    /* position: absolute; */
+    /* left: 0; */
+    /* top: 0; */
+    /* width: 100vw; */
+    /* height: 100vh; */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    /* -webkit-transform: translateX(-50%) translateY(-50%); */
+    transform: translateX(-50%) translateY(-50%);
+    background-size: cover;
+    /* -webkit-transition: 1s opacity; */
+    transition: 1s opacity;
+}
+.inner-container{
+  width:375px;
+  height:300px;
+  position:absolute;
+  top:calc(50vh - 200px);
+  left:calc(50vw - 200px);
+  overflow:hidden;
+}
+.bgvid.inner{
+  top:calc(-50vh + 200px);
+  left:calc(-50vw + 200px);
+  filter: url("data:image/svg+xml;utf9,<svg%20version='1.1'%20xmlns='http://www.w3.org/2000/svg'><filter%20id='blur'><feGaussianBlur%20stdDeviation='10'%20/></filter></svg>#blur");
+  -webkit-filter:blur(10px);
+  -ms-filter: blur(10px);
+  -o-filter: blur(10px);
+  filter:blur(10px);
+}
+.box{
+  position:absolute;
+  height:100%;
+  width:100%;
+  font-family:Helvetica;
+  color:#fff;
+  background:rgba(0,0,0,0.13);
+  padding:20px 0px;
+  border-top: 3px solid rgba(0,0,0,0.0);
+}
+.box h1{
+  text-align:center;
+  margin:30px 0;
+  font-size:30px;
+}
+.box h2{
+  text-align:center;
+  margin:30px 0;
+  font-size:20px;
+}
+.box input{
+  display:block;
+  width:273px;
+  margin:20px 0px 20px 35px;
+  padding:15px;
+  background:rgba(0,0,0,0.2);
+  color:#fff;
+  border:0;
+}
+.box input:focus,.box input:active,.box button:focus,.box button:active{
+  outline:none;
+}
+.box button{
+  background:rgba(0,0,0,0.2);
+  border:0;
+  color:#fff;
+  padding:10px;
+  font-size:20px;
+  width:303px;
+  margin:20px 0px 20px 35px;
+  display:block;
+  cursor:pointer;
+}
+.box button:active{
+  background:#27ae60;
+}
+.box button:hover{
+  background:#545657;
+}
+.box p{
+  font-size:14px;
+  text-align:center;
+}
+.box p span{
+  cursor:pointer;
+  color:#666;
+}
+.custom_lock{
+  margin-top: 160px;
+}
+.custom_footer{
+  margin-top: 100px;
+  margin-left: 25px;
+}

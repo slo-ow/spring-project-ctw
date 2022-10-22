@@ -1,0 +1,30 @@
+/**
+ * <pre>
+ * 거래처 요청 승인 css
+ * </pre>
+ * @author 문성철
+ * @since 2017. 5. 4.
+ * @version 1.0
+ * @see
+ * <pre>
+ * [[개정이력(Modification Information)]]
+ * 수정일          수정자            수정내용
+ * --------     --------      -------------
+ * 2017. 5. 4.    작성자명          최초작성
+ * Copyright (c) 2017 by CTW All right reserved
+ * </pre>
+ */ 
+@CHARSET "UTF-8";
+.table{
+	text-align: center;
+	cursor: pointer;
+}
+th{
+	text-align: center;
+} 	
+tr:hover {
+	background-color: oldlace;
+}
+.box{
+	height: 725px;	
+}

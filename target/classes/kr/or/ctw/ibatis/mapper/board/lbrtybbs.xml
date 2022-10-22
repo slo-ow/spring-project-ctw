@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="lbrtybbs">
+	
+<!-- 게시글 입력 -->	
+<insert id="insertBbs" parameterClass="LbrtyBBSVO">
+	<selectKey keyProperty="bbs_pk" resultClass="int">
+		SELECT LBRTY_BBS_SEQ.NEXTVAL FROM DUAL
+	</selectKey>
+INSERT INTO LBRTY_BBS( BBS_PK
+				,BBS_SJ
+				,BBS_CN
+				,BBS_DATE
+				,BBS_CNT
+				,MEM_ID
+				,ACTVTY_PK
+ 			    )
+ 		 VALUES( #bbs_pk#
+ 		  		,#bbs_sj#
+ 		  		,#bbs_cn#
+ 		  		,SYSDATE
+ 		  		,0
+ 		  		,#mem_id#
+ 		  		,'free'
+ 		  		)
+</insert>
+
+<!-- 게시글 조회 -->
+<select id="listAll" resultClass="LbrtyBBSVO">
+SELECT * FROM LBRTY_BBS ORDER BY BBS_PK DESC
+</select>
+
+
+<!-- 게시글 수정 -->
+<update id="updateBbs" parameterClass="LbrtyBBSVO">
+UPDATE LBRTY_BBS
+SET
+	BBS_SJ = #bbs_sj#
+   ,BBS_CN = #bbs_cn#
+   
+WHERE BBS_PK = #bbs_pk#
+</update>
+
+
+<!-- 게시글 삭제 -->
+<delete id="deleteBbs" parameterClass="int">
+DELETE FROM LBRTY_BBS WHERE BBS_PK = #bbs_pk#
+</delete>
+
+<!-- 게시글 상세조회 -->
+<select id="selectBbs" parameterClass="int" resultClass="LbrtyBBSVO">
+SELECT BBS_PK
+	  ,BBS_SJ
+	  ,BBS_CN
+	  ,BBS_DATE
+	  ,BBS_CNT
+	  ,MEM_ID
+FROM LBRTY_BBS
+WHERE BBS_PK = #bbs_pk#
+</select>
+
+<!-- 게시글 조회수증가 -->
+<update id="upCntBbs" parameterClass="int">
+UPDATE LBRTY_BBS
+SET	   BBS_CNT = BBS_CNT+1
+WHERE  BBS_PK = #bbs_pk#
+</update>
+
+
+</sqlMap>

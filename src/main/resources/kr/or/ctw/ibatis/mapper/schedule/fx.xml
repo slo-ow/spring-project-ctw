@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!--  [[개정이력(Modification Information)]]  				 -->
+<!--  수정일        		수정자      수정내용                			 -->
+<!--  ====     		====   =====    					 -->
+<!--  2017.05.02       김완수     최초작성                		     -->
+<!--  Copyright (c) 2017 by CTW All right reserved    -->
+<sqlMap namespace="fx">
+
+	<select id="testCnt" resultClass="int" >
+			SELECT COUNT(*) FROM DEPT_FX
+	</select>
+
+
+     <!-- LIST 쿼리  -->
+      <select id="deptFxList" parameterClass="memberVO" resultClass="fxVO">
+         SELECT * FROM DEPT_FX 
+         WHERE DEPT_FK = #dept_pk#
+      </select>
+      
+      <select id="memFxList" parameterClass="memberVO" resultClass="fxVO">
+         SELECT * FROM MEM_FX
+         WHERE MEM_ID = #mem_id#
+      
+      </select>
+      
+      <select id="cmpnyFxList" resultClass="fxVO">
+         SELECT * FROM CMPNY_FX
+      
+      </select>
+       <!-- LIST 쿼리 끝 -->
+      
+      <!-- INSERT쿼리  -->
+      <insert id="memFxInsert" parameterClass="fxVO" >
+      
+      INSERT INTO MEM_FX VALUES(
+                         MEM_FX_SEQ.NEXTVAL                    
+                       , #fx_nm#
+                       , TO_DATE(#fx_begin#,'YYYY-mm-DD HH24:MI:SS')
+                       , TO_DATE(#fx_end#,'YYYY-mm-DD HH24:MI:SS')
+                       , #fx_memo#
+                       , #mem_id#
+                       )
+      
+      </insert>
+      
+      <insert id="deptFxInsert" parameterClass="fxVO" >
+      
+      INSERT INTO DEPT_FX VALUES(
+                         DEPT_FX_SEQ.NEXTVAL                    
+                       , #fx_nm#
+                       , TO_DATE(#fx_begin#,'YYYY-mm-DD HH24:MI:SS')
+                       , TO_DATE(#fx_end#,'YYYY-mm-DD HH24:MI:SS')
+                       , #fx_memo#
+                       , 'N'
+                       , #mem_id#
+                       , #dept_fk#
+                       )
+      
+      </insert>
+      
+      <insert id="comFxInsert" parameterClass="fxVO" >
+      
+      INSERT INTO CMPNY_FX VALUES(
+                        CMPNY_FX_SEQ.NEXTVAL                    
+                       , #fx_nm#
+                       , TO_DATE(#fx_begin#,'YYYY-mm-DD HH24:MI:SS')
+                       , TO_DATE(#fx_end#,'YYYY-mm-DD HH24:MI:SS')
+                       , #fx_memo#
+                       , #mem_id#
+                       )
+      
+      </insert>
+            <!-- INSERT쿼리  끝 -->
+
+      <!-- 정보쿼리  -->
+      <select id="memInfo" parameterClass="int" resultClass="fxVO">
+      	SELECT * FROM MEM_FX 
+      	WHERE FX_PK = #fx_pk#
+      </select>
+      
+      <select id="deptInfo" parameterClass="int" resultClass="fxVO">
+      	SELECT * FROM DEPT_FX 
+      	WHERE FX_PK = #fx_pk#
+      </select>
+      
+      <select id="comInfo" parameterClass="int" resultClass="fxVO">
+      	SELECT * FROM CMPNY_FX 
+      	WHERE FX_PK = #fx_pk#
+      </select>
+      <!-- 정보쿼리 끝 -->
+      
+      
+      
+
+	<!-- 삭제 쿼리 -->      
+	<delete id="memFxDelete" parameterClass="int">
+		DELETE 
+		FROM    MEM_FX 
+		WHERE  FX_PK = #fx_pk#
+	</delete>
+      
+     <delete id="deptFxDelete" parameterClass="int">
+		DELETE 
+		FROM    DEPT_FX 
+		WHERE  FX_PK = #fx_pk#
+	
+	</delete>
+      
+     <delete id="comFxDelete" parameterClass="int">
+		DELETE 
+		FROM    CMPNY_FX 
+		WHERE  FX_PK = #fx_pk#
+	
+	</delete>
+      <!-- 삭제처리 쿼리 끝 -->
+      
+      
+      
+      <!-- 업데이트 처리 쿼리  -->
+      <update id="memFxUpdate" parameterClass="fxVO">
+      	UPDATE MEM_FX 
+      	SET    	FX_NM=#fx_nm#
+      			  , FX_MEMO=#fx_memo#
+      			  , FX_BEGIN=TO_DATE(#fx_begin#,'YYYY-mm-DD HH24:MI:SS')
+      			  , FX_END= TO_DATE(#fx_end#,'YYYY-mm-DD HH24:MI:SS')
+      	WHERE  FX_PK = #fx_pk#
+      </update>
+      <update id="deptFxUpdate" parameterClass="fxVO">
+      	UPDATE 	DEPT_FX 
+      	SET    	FX_NM=#fx_nm#
+      			  , FX_MEMO=#fx_memo#
+      			  , FX_BEGIN=TO_DATE(#fx_begin#,'YYYY-mm-DD HH24:MI:SS')
+      			  , FX_END= TO_DATE(#fx_end#,'YYYY-mm-DD HH24:MI:SS')
+      	WHERE  FX_PK = #fx_pk#
+      </update>
+      
+      <update id="comFxUpdate" parameterClass="fxVO">
+      	UPDATE CMPNY_FX 
+      	SET    	FX_NM=#fx_nm#
+      			  , FX_MEMO=#fx_memo#
+      			  , FX_BEGIN=TO_DATE(#fx_begin#,'YYYY-mm-DD HH24:MI:SS')
+      			  , FX_END= TO_DATE(#fx_end#,'YYYY-mm-DD HH24:MI:SS')
+      	WHERE  FX_PK = #fx_pk#
+      </update>
+            <!-- 업데이트 처리 쿼리 끝  -->
+      
+</sqlMap>

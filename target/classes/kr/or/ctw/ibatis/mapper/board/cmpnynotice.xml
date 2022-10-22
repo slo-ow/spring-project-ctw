@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmpnynotice">
+	
+	<select id="CompanyNoticeList" parameterClass="map" resultClass="cmpnynoticeVO">
+		SELECT  C.*,M.MEM_NM 
+		FROM    CMPNY_NOTICE C,MEMBER M
+		WHERE	M.MEM_ID = C.MEM_ID 
+		<dynamic prepend="AND">
+			<isNotEmpty property="notice_pk">
+				C.NOTICE_PK = #notice_pk#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY C.NOTICE_PK DESC
+	</select>
+	
+	<insert id="companyNoticeInsert" parameterClass="cmpnynoticeVO">
+		<selectKey keyProperty="notice_pk" resultClass="int" >
+			SELECT CMPNY_NOTICE_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO CMPNY_NOTICE(
+						NOTICE_PK
+						,NOTICE_SJ
+						,NOTICE_CN
+						,NOTICE_DATE
+						,NOTICE_CNT
+						,MEM_ID
+						,ACTVTY_PK
+						)
+		VALUES(
+				#notice_pk#
+				,#notice_sj#
+				,#notice_cn#
+				,SYSDATE
+				,0
+				,#mem_id#
+				,'notice'
+				)
+	</insert>
+	
+	<select id="selectInfo" parameterClass="int" resultClass="cmpnynoticeVO">
+		SELECT  C.*,M.MEM_NM 
+		FROM    CMPNY_NOTICE C,MEMBER M
+		WHERE	M.MEM_ID = C.MEM_ID 
+		AND		C.NOTICE_PK = #notice_pk#
+	</select>
+	
+	<update id="updateHits" parameterClass="int">
+		UPDATE	CMPNY_NOTICE
+		SET	 	NOTICE_CNT = NOTICE_CNT+1
+		WHERE	NOTICE_PK = #notice_pk#
+	</update>
+	
+	
+	<update id="companyDel" parameterClass="int">
+		DELETE
+		FROM	CMPNY_NOTICE
+		WHERE	NOTICE_PK = #notice_pk#
+	</update>
+	
+	<update id="companyUpdate" parameterClass="cmpnynoticeVO">
+		UPDATE	 CMPNY_NOTICE
+		SET		NOTICE_SJ =#notice_sj#
+				,NOTICE_CN=#notice_cn#
+		WHERE	 NOTICE_PK = #notice_pk#
+	</update>
+</sqlMap>

@@ -1,0 +1,26 @@
+<!-- 
+ * @Description : 거래처 등록요청 모달 custom css 
+ * @author 문성철 (icet25@naver.com)
+ * @version 1.0
+ * @since 2017.04.25
+ * 
+ -->
+@CHARSET "UTF-8";
+.modal-body {
+	padding:0px 0px 0px 0px;
+}
+.modal-content {
+	width: 300px;
+	margin-left: 200px;
+}
+.modal-header {
+	text-align: center;
+	border-bottom-color: darkslategrey;
+	background-color: darkslategrey;
+	color: white;
+}
+.modal-footer {
+	text-align: center;
+	border-bottom-color: darkslategrey;
+	background-color: darkslategrey;
+}

@@ -1,0 +1,15 @@
+/*
+	작성자: 문성철
+	설명   : 좌측 상단 로고의 margin
+*/
+#textLogo{
+	margin-bottom : 5px; 
+}
+@font-face { 
+ 	font-family : 'HamChorom'; 
+ 	src : url('/ctw/resources/mainform/font/함초롱돋움R.ttf'); 
+ }
+ body{
+ 	font-family: HamChorom;
+ }
+

@@ -1,0 +1,43 @@
+@CHARSET "UTF-8";
+
+.pull-rigth {
+	float: right;
+	margin: 1%;
+}
+
+.form-group {
+	margin-bottom: 10px;
+}
+
+#memberList {
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 230px;
+	margin: 10px 0px 10px 0px;
+	height: 300px;
+	background-color: #fff8e5;
+}
+#memberList div:HOVER{
+	background-color: #ffefc6;
+	cursor: pointer;
+}
+
+#infoCn{
+	height: 300px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	
+}
+.info{
+	height: 400px;
+	
+}
+.test{
+	border-bottom: 1px solid #d1d1d1;
+	
+}
+
+#tbodylist tr:HOVER {
+	cursor: pointer;
+	background-color: #e5e5e5;
+}

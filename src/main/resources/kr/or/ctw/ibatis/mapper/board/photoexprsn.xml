@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!--  [[개정이력(Modification Information)]]       -->
+<!--  수정일        수정자     수정내용            -->
+<!--  ==========   ======    ==============        -->
+<!--  2017. 4. 25.   박혜윤     최초작성            -->
+<!--  Copyright (c) 2017 by DDIT All right reserved -->
+<sqlMap namespace="photoexprsn">
+	
+	<insert id="likeInsert" parameterClass="map">
+		<selectKey keyProperty="exprsn_pk" resultClass="int" >
+			SELECT PHOTO_EXPRSN_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO PHOTO_EXPRSN(
+								EXPRSN_PK
+								,PHOTO_FK
+								,EXPRSN_SE_FK
+								,MEM_ID
+								)
+		VALUES(
+				#exprsn_pk#
+				,#photo_fk#
+				,1
+				,#mem_id#
+				)
+	</insert>
+	
+	<update id="likedelete" parameterClass="map">
+		delete
+		from	PHOTO_EXPRSN
+		where	PHOTO_FK =#photo_fk#
+		and		MEM_ID = #mem_id#
+	</update>
+	
+	<select id="photoExprsnList" parameterClass="map" resultClass="photoexprsnVO">
+		
+		SELECT *
+		FROM  PHOTO_EXPRSN
+	   	where MEM_ID = #mem_id#
+		and PHOTO_FK = #photo_fk#
+		
+	</select>
+	
+	
+	<select id="likeCount" resultClass="photoexprsnVO">
+		SELECT  P.PHOTO_PK
+		        ,E.EXPRSN_SE_FK
+		        ,COUNT(P.PHOTO_PK) AS LIKE_COUNT
+		FROM    PHOTO P, PHOTO_EXPRSN E
+		WHERE   P.PHOTO_PK = E.PHOTO_FK(+)
+		GROUP BY P.PHOTO_PK, E.EXPRSN_SE_FK
+	</select>
+	
+	
+</sqlMap>

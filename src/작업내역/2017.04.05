@@ -1,0 +1,18 @@
+2017.04.05
+문성철 - views/indexpage/presentation.jsp 파일 추가 -> PPT 발표자료 swiper API 적용 페이지
+
+2017.04.05
+문성철 - views/index_layout 폴더생성 -> header.jsp , footer.jsp 파일생성 layout 분할.
+
+2017.04.05
+문성철 - views/indexpage/contact.jsp 파일 추가 -> Google Map API 적용 , 회사 위치 소개 페이지
+
+2017.04.05
+문성철 - views/indexpage/contact.jsp 지도 div 스타일 변경 -> 121번 라인 <section class="wrapper style5" style="height: 600px; padding-top: 10px;"> 으로 변경. 
+
+2017.04.05
+문성철 - views/indexpage/contact.jsp -> Google Map API Marker 적용 완료. 수정 끝
+
+2017.04.05
+문성철 - views/indexpage/introduce.jsp -> 초기작업완료 / custom.css, introduce.jsp, images 아이콘이미지 추가 / 
+

@@ -1,0 +1,26 @@
+@CHARSET "UTF-8";
+.sort{
+	float:left;
+}
+#calendar{
+	width:100%;
+    border: 0.5px solid #e2e2e2;
+    border-top: 1px solid white;
+
+}
+.fc-toolbar{
+border-top-style: none;
+}
+.fc-day-number.fc-토.fc-past { color:#0000FF;}     /* 토요일 */
+.fc-day-number.fc-일.fc-past { color:#FF0000;}    /* 일요일 */ 
+.fc-day-number.fc-토.fc-future{color:#0000FF; }
+.fc-day-number.fc-일.fc-future{color:#FF0000;}
+.fc-widget-header:last-of-type, .fc-widget-content:last-of-type{
+background-color: white;
+}
+.fc-unthemed .fc-today{
+background-color: #e4e8ff;
+}
+a{
+	cursor: pointer;
+}

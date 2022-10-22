@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!--  [[개정이력(Modification Information)]]       -->
+<!--  수정일        수정자     수정내용            -->
+<!--  ==========   ======    ==============        -->
+<!--  2017. 5. 9.   박혜윤     최초작성            -->
+<!--  Copyright (c) 2017 by DDIT All right reserved -->
+<sqlMap namespace="membermain">
+	
+	<select id="sexRateChart" resultClass="memberVO">
+		SELECT MEM_SEX
+		      ,COUNT(MEM_SEX) AS MEM_COUNT
+		FROM  MEMBER 
+		GROUP BY MEM_SEX
+		ORDER BY MEM_SEX DESC
+	</select>
+	
+	<select id="deptChart" resultClass="memberVO" >
+		SELECT M.DEPT_PK
+		      ,D.DEPT_NM
+		      ,COUNT(M.DEPT_PK) AS MEM_COUNT
+		FROM MEMBER M, DEPT D
+		WHERE M.DEPT_PK = D.DEPT_PK
+		GROUP BY M.DEPT_PK,D.DEPT_NM
+		ORDER BY M.DEPT_PK ASC
+	</select>
+	
+</sqlMap>

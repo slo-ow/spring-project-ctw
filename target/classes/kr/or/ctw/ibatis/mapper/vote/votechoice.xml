@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="votechoice">
+	
+
+	
+	<insert id="choiceInsert" parameterClass="votechoiceVO">
+
+		INSERT INTO VOTE_CHOICE(
+						CHOICE_PK
+						,CHOICE_NO
+						,CHOICE_CN
+						,VOTE_FK
+						)
+		VALUES(
+				vote_choice_seq.nextval
+				,#choice_no#
+				,#choice_cn#
+				,#vote_fk#
+				)
+		
+	
+	</insert>
+	
+
+	
+	<select id="voteResult" parameterClass="int" resultClass="votechoiceVO">
+	<!-- 
+		SELECT  *
+		FROM  VOTE_CHOICE
+		WHERE VOTE_FK=#vote_fk# -->
+	SELECT  C.CHOICE_PK
+			,C.CHOICE_NO
+			,C.CHOICE_CN
+			,C.VOTE_FK
+			,COUNT(C.CHOICE_NO ) AS VOTE_COUNT
+	FROM  VOTE_CHOICE C, VOTE_RT R
+	WHERE C.CHOICE_PK = R.CHOICE_FK
+	AND R.VOTE_FK=#vote_fk#
+	GROUP BY C.CHOICE_PK,C.CHOICE_NO,C.CHOICE_CN,C.VOTE_FK
+	
+	</select>
+	
+</sqlMap>

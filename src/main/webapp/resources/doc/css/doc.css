@@ -1,0 +1,78 @@
+@CHARSET "UTF-8";
+
+
+.filecontent{
+	margin-top: 2%;
+	width: 95%;
+	background-color: white;
+	height: 750px;
+    border-radius: 10px;
+}
+.headerFile{
+	width: 100%;
+	background-color: #605ca8;
+	height: 50px;
+	 border: 1px solid #605ca8;
+    border-radius: 10px;
+}
+
+.search{
+	margin:7px;
+	margin-right:15px;
+}
+#fileappend .bootstrap-filestyle{
+margin-bottom: 5px;	
+width: 100%;
+
+
+}
+.bootstrap-filestyle{
+margin-bottom: 5px;	
+width: 90%;
+
+}
+
+.subfile{
+	float:right;	
+	height:28px;
+	margin-right: 5%;
+}
+
+.fileinput{
+	width: 90%;
+	float: left;
+}
+.filelist{
+ width:100%;
+ height:550px;
+ overflow-x:hidden; 
+ overflow-y:auto; 
+}
+.filefloat{
+	width: 200px; 
+	height:200px;
+	float: left;
+	text-align: center;
+	margin: 3px;
+	border: 1px solid #605ca8;
+    border-radius: 10px;
+}
+.down{	
+	margin-top:20%;
+	cursor:pointer;
+	width: 40%;
+	height: 40%;
+}
+.deleteFile{
+	width:10%;
+    margin:10%;
+	color:red;
+	float:right;
+	cursor:pointer;
+}
+.updateFile{
+	width:10%;
+	margin:10%;
+	float: left;
+	color:blue;
+}
